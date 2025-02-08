@@ -1,102 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Las muertes más absurdas</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="Images/Logo.png" type="image/x-icon">
-</head>
-<body>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="Images/Logo.png" type="image/x-icon" />
+  </head>
+  <body>
     <!-- Boton de configuracion y menu -->
     <div class="config-container">
-        <button class="config-button" onclick="toggleConfig()">
-            <i class="fas fa-cog"></i>
-        </button>
+      <button class="config-button" onclick="toggleConfig()">
+        <i class="fas fa-cog"></i>
+      </button>
 
-        <div class="config-menu" id="configMenu">
-            <h3>Configuracion</h3>
-            <div class="config-option">
-                <label>Tema</label>
-                <div class="theme-switch">
-                    <input type="checkbox" id="themeToggle">
-                    <label for="themeToggle" class="switchLabel">
-                        <i class="fas fa-sun"></i>
-                        <i class="fas fa-moon"></i>
-                    </label>
-                </div>
-            </div>
-            <!-- Tamaño de fuente -->
-            <div class="config-option">
-                <label>Tamaño de texto</label>
-                <div class="size-buttons">
-                    <button onclick="changeFontSize('small')" class="size-btn">A-</button>
-                    <button onclick="changeFontSize('normal')" class="size-btn">A</button>
-                    <button onclick="changeFontSize('large')" class="size-btn">A+</button>
-                </div>
-            </div>
-
-            <!-- Velocidad de animaciones -->
-            <div class="config-option">
-                <label>Velocidad de animaciones</label>
-                <select id="animationSpeed" onchange="changeAnimationSpeed()">
-                    <option value="0.5">Rapida</option>
-                    <option value="1" selected>Normal</option>
-                    <option value="2">Lenta</option>
-                </select>
-            </div>
-
-            <!-- Emoji para calificacion -->
-            <div class="config-option">
-                <label>Estilo de calificacion</label>
-                <select id="ratingStyle" onchange="changeRatingStyle()">
-                    <option value="skull">Calaveras 💀</option>
-                    <option value="star">Estrellas ⭐</option>
-                    <option value="ghost">Fantasmas 👻</option>
-                    <option value="pumpkin">Calabazas 🎃</option>
-                </select>
-            </div>
-
-            <!-- Cantidad de emojis -->
-            <div class="config-option">
-                <label>Cantidad de emojis</label>
-                <input type="range" id="emojiAcount" min="10" max="100" value="50" onchange="updateEmojiAccount()">
-                <span id="emojiAmountValue">50</span>
-            </div>
-
-            <button class="reset-button" onclick="resetConfig()">
-                <i class="fas fa-undo"></i>
-                Restaurar valores predeterminados
-            </button>
+      <div class="config-menu" id="configMenu">
+        <h3>Configuracion</h3>
+        <div class="config-option">
+          <label>Tema</label>
+          <div class="theme-switch">
+            <button class="fas fa-sun" id="temaClaro"></button>
+            <button class="fas fa-moon" id="temaOscuro"></button>
+          </div>
         </div>
+        <!-- Tamaño de fuente -->
+        <div class="config-option">
+          <label>Tamaño de texto</label>
+          <div class="size-buttons">
+            <button onclick="changeFontSize('small')" class="size-btn">
+              A-
+            </button>
+            <button onclick="changeFontSize('normal')" class="size-btn">
+              A
+            </button>
+            <button onclick="changeFontSize('large')" class="size-btn">
+              A+
+            </button>
+          </div>
+        </div>
+
+        <!-- Velocidad de animaciones -->
+        <div class="config-option">
+          <label>Velocidad de animaciones</label>
+          <select id="animationSpeed" onchange="changeAnimationSpeed()">
+            <option value="0.5">Rapida</option>
+            <option value="1" selected>Normal</option>
+            <option value="2">Lenta</option>
+          </select>
+        </div>
+
+        <!-- Emoji para calificacion -->
+        <div class="config-option">
+          <label>Estilo de calificacion</label>
+          <select id="ratingStyle" onchange="changeRatingStyle()">
+            <option value="skull">Calaveras 💀</option>
+            <option value="star">Estrellas ⭐</option>
+            <option value="ghost">Fantasmas 👻</option>
+            <option value="pumpkin">Calabazas 🎃</option>
+          </select>
+        </div>
+
+        <!-- Cantidad de emojis -->
+        <div class="config-option">
+          <label>Cantidad de emojis</label>
+          <input
+            type="range"
+            id="emojiAcount"
+            min="10"
+            max="100"
+            value="50"
+            onchange="updateEmojiAccount()"
+          />
+          <span id="emojiAmountValue">50</span>
+        </div>
+
+        <button class="reset-button" onclick="resetConfig()">
+          <i class="fas fa-undo"></i>
+          Restaurar valores predeterminados
+        </button>
+      </div>
     </div>
 
-
     <div class="container">
-        <h1>Las Muertes Más Absurdas</h1>
-        <h3>Todo esto es humorístico y fantasioso y no es para ofender a nadie, solo es por diversión</h3>
-        
-        <button class="death-button" onclick="showRandomDeath()">
-            <i class="fas fa-skull"></i>
-            Ver muerte absurda
-        </button>
+      <h1>Las Muertes Más Absurdas</h1>
+      <h3>
+        Todo esto es humorístico y fantasioso y no es para ofender a nadie, solo
+        es por diversión
+      </h3>
 
-        <div id="output"></div>
+      <button class="death-button" onclick="showRandomDeath()">
+        <i class="fas fa-skull"></i>
+        Ver muerte absurda
+      </button>
 
-        <div id="rating-container" class="rating-container hidden">
-            <h4>¿Que tan absurda es esta muerte?</h4>
-            <div class="rating-stars">
-                <span class="skull-rating" data-rating="1">💀</span>
-                <span class="skull-rating" data-rating="2">💀</span>
-                <span class="skull-rating" data-rating="3">💀</span>
-                <span class="skull-rating" data-rating="4">💀</span>
-                <span class="skull-rating" data-rating="5">💀</span>
-            </div>
-            <p id="rating-text" class="rating-text"></p>
+      <div id="output"></div>
+
+      <div id="rating-container" class="rating-container hidden">
+        <h4>¿Que tan absurda es esta muerte?</h4>
+        <div class="rating-stars">
+          <span class="skull-rating" data-rating="1">💀</span>
+          <span class="skull-rating" data-rating="2">💀</span>
+          <span class="skull-rating" data-rating="3">💀</span>
+          <span class="skull-rating" data-rating="4">💀</span>
+          <span class="skull-rating" data-rating="5">💀</span>
         </div>
+        <p id="rating-text" class="rating-text"></p>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

@@ -111,25 +111,23 @@ const config = {
     emojiAmount: 50
 };
 
-// Cargar configuración guardada
 function loadConfig() {
     const savedConfig = localStorage.getItem('siteConfig');
     if (savedConfig) {
         Object.assign(config, JSON.parse(savedConfig));
     }
-    applyConfig();
+    applyConfig(); // Aplicar la configuración cargada
 }
 
-// Guardar configuración
 function saveConfig() {
     localStorage.setItem('siteConfig', JSON.stringify(config));
 }
 
-// Aplicar configuración
 function applyConfig() {
     // Aplicar tema
     document.documentElement.setAttribute('data-theme', config.theme);
-    document.getElementById('themeToggle').checked = config.theme === 'dark';
+    document.getElementById('temaClaro').checked = config.theme === 'light';
+    document.getElementById('temaOscuro').checked = config.theme === 'dark';
 
     // Aplicar tamaño de fuente
     document.body.style.fontSize = {
@@ -146,16 +144,14 @@ function applyConfig() {
 
     // Aplicar configuración de sonido
     document.getElementById('soundToggle').checked = config.sound;
-
-    // Aplicar cantidad de emojis
     const emojiInput = document.getElementById('emojiAmount').value = config.emojiAmount;
     const emojiValue = document.getElementById('emojiAmountValue').textContent = config.emojiAmount;
     if (emojiInput && emojiValue) {
         emojiInput.value = config.emojiAmount;
-        emojiValue.textContent = config.emojiAmount
+        emojiValue.textContent = config.emojiAmount;
     }
 
-    saveConfig();
+    saveConfig(); // Guardar la configuración
 }
 
 // Cambiar tamaño de fuente
@@ -199,17 +195,17 @@ function updateEmojiAmount() {
     saveConfig();
 }
 
-// Resetear configuración
 function resetConfig() {
-    const currentTheme = config.theme; 
+    const currentTheme = config.theme; // Guardar el tema actual
     Object.assign(config, {
-        fontSize:'normal',
+        fontSize: 'normal',
         animationSpeed: 1,
         ratingStyle: 'skull',
         sound: false,
         emojiAmount: 50,
-        theme: currentTheme
+        theme: currentTheme // Mantener el tema actual
     });
+    applyConfig(); // Aplicar la configuración actualizada
 }
 
 function toggleConfig() {
@@ -225,19 +221,18 @@ function toggleConfig() {
     }
 }
 
-// Función para manejar el cambio de tema
 function handleThemeChange(e) {
     const html = document.documentElement;
     if (e.target.checked) {
         html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
+        config.theme = 'dark'; // Actualizar el tema en la configuración
     } else {
         html.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
+        config.theme = 'light'; // Actualizar el tema en la configuración
     }
+    saveConfig(); // Guardar la configuración actualizada
 }
 
-// Inicializar el tema
 function initializeTheme() {
     const themeToggle = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -245,6 +240,7 @@ function initializeTheme() {
     
     html.setAttribute('data-theme', savedTheme);
     themeToggle.checked = savedTheme === 'dark';
+    config.theme = savedTheme; // Asegurarse de que el tema se guarde en la configuración
     
     themeToggle.addEventListener('change', handleThemeChange);
 }
