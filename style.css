@@ -24,6 +24,30 @@
     --text-color-20: rgba(236, 240, 241, 0.2);
 }
 
+/* Estilos para el interruptor de tema independiente */
+.theme-toggle-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.theme-toggle-btn:hover {
+    transform: rotate(45deg);
+    background-color: var(--text-color-20);
+}
+
 /* Estilos para el boton y menu de configuracion */
 .config-container {
     position: fixed;
@@ -93,8 +117,8 @@
 }
 
 .theme-switch button {
-    opacity: 0;
-    width: 0;
+    opacity: 1;
+    width: 3;
     height: 0;
 }
 

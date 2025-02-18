@@ -12,6 +12,13 @@
     <link rel="shortcut icon" href="Images/Logo.png" type="image/x-icon" />
   </head>
   <body>
+    <!-- Interruptor de tema independiente -->
+    <div class="theme-toggle-container">
+      <button id="themeToggleBtn" class="theme-toggle-btn">
+        <i id="themeIcon" class="fas fa-moon"></i>
+      </button>
+    </div>
+
     <!-- Boton de configuracion y menu -->
     <div class="config-container">
       <button class="config-button" onclick="toggleConfig()">
@@ -20,13 +27,6 @@
 
       <div class="config-menu" id="configMenu">
         <h3>Configuracion</h3>
-        <div class="config-option">
-          <label>Tema</label>
-          <div class="theme-switch">
-            <button class="fas fa-sun" id="temaClaro"></button>
-            <button class="fas fa-moon" id="temaOscuro"></button>
-          </div>
-        </div>
         <!-- Tamaño de fuente -->
         <div class="config-option">
           <label>Tamaño de texto</label>

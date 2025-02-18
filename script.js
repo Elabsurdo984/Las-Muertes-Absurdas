@@ -126,8 +126,12 @@ function saveConfig() {
 function applyConfig() {
     // Aplicar tema
     document.documentElement.setAttribute('data-theme', config.theme);
-    document.getElementById('temaClaro').checked = config.theme === 'light';
-    document.getElementById('temaOscuro').checked = config.theme === 'dark';
+    
+    // Actualizar el icono del botón de tema
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+        themeIcon.className = config.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
 
     // Aplicar tamaño de fuente
     document.body.style.fontSize = {
@@ -142,16 +146,21 @@ function applyConfig() {
     // Aplicar estilo de calificación
     updateRatingSymbols();
 
-    // Aplicar configuración de sonido
-    document.getElementById('soundToggle').checked = config.sound;
-    const emojiInput = document.getElementById('emojiAmount').value = config.emojiAmount;
-    const emojiValue = document.getElementById('emojiAmountValue').textContent = config.emojiAmount;
+    // Actualizar el valor del slider de emojis
+    const emojiInput = document.getElementById('emojiAcount');
+    const emojiValue = document.getElementById('emojiAmountValue');
     if (emojiInput && emojiValue) {
         emojiInput.value = config.emojiAmount;
         emojiValue.textContent = config.emojiAmount;
     }
 
     saveConfig(); // Guardar la configuración
+}
+
+// Función para alternar el tema
+function toggleTheme() {
+    config.theme = config.theme === 'light' ? 'dark' : 'light';
+    applyConfig();
 }
 
 // Cambiar tamaño de fuente
@@ -188,8 +197,8 @@ function updateRatingSymbols() {
 }
 
 // Actualizar cantidad de emojis
-function updateEmojiAmount() {
-    const amount = document.getElementById('emojiAmount').value;
+function updateEmojiAccount() {
+    const amount = document.getElementById('emojiAcount').value;
     config.emojiAmount = parseInt(amount);
     document.getElementById('emojiAmountValue').textContent = amount;
     saveConfig();
@@ -221,30 +230,6 @@ function toggleConfig() {
     }
 }
 
-function handleThemeChange(e) {
-    const html = document.documentElement;
-    if (e.target.checked) {
-        html.setAttribute('data-theme', 'dark');
-        config.theme = 'dark'; // Actualizar el tema en la configuración
-    } else {
-        html.setAttribute('data-theme', 'light');
-        config.theme = 'light'; // Actualizar el tema en la configuración
-    }
-    saveConfig(); // Guardar la configuración actualizada
-}
-
-function initializeTheme() {
-    const themeToggle = document.getElementById('themeToggle');
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    const html = document.documentElement;
-    
-    html.setAttribute('data-theme', savedTheme);
-    themeToggle.checked = savedTheme === 'dark';
-    config.theme = savedTheme; // Asegurarse de que el tema se guarde en la configuración
-    
-    themeToggle.addEventListener('change', handleThemeChange);
-}
-
 // Cerrar el menú de configuración al hacer clic fuera
 document.addEventListener('click', (e) => {
     const configMenu = document.getElementById('configMenu');
@@ -255,14 +240,6 @@ document.addEventListener('click', (e) => {
         configButton.style.transform = 'rotate(0deg)';
     }
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    const configMenu = document.getElementById('configMenu');
-    configMenu.classList.remove('visible');
-});
-
-// Inicializar el tema cuando se carga la página
-document.addEventListener('DOMContentLoaded', initializeTheme);
 
 // Objeto para almacenar calificaciones
 const deathRatings = {};
@@ -391,7 +368,24 @@ function createEmojiShower(deathText) {
     }
 }
 
-// Inicializar configuración al cargar la página
+// Función para inicializar el tema
+function initializeTheme() {
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    
+    // Verificar si el botón existe
+    if (themeToggleBtn) {
+        // Agregar evento de clic para alternar el tema
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        
+        // Actualizar el icono según el tema actual
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = config.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    }
+}
+
+// Añadir la inicialización del tema al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     loadConfig();
     initializeTheme();
