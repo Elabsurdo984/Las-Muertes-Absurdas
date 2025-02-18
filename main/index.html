@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Las muertes más absurdas</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="Images/Logo.png" type="image/x-icon" />
+  </head>
+  <body>
+    <!-- Interruptor de tema independiente -->
+    <div class="theme-toggle-container">
+      <button id="themeToggleBtn" class="theme-toggle-btn">
+        <i id="themeIcon" class="fas fa-moon"></i>
+      </button>
+    </div>
+
+    <!-- Boton de configuracion y menu -->
+    <div class="config-container">
+      <button class="config-button" onclick="toggleConfig()">
+        <i class="fas fa-cog"></i>
+      </button>
+
+      <div class="config-menu" id="configMenu">
+        <h3>Configuracion</h3>
+        <!-- Tamaño de fuente -->
+        <div class="config-option">
+          <label>Tamaño de texto</label>
+          <div class="size-buttons">
+            <button onclick="changeFontSize('small')" class="size-btn">
+              A-
+            </button>
+            <button onclick="changeFontSize('normal')" class="size-btn">
+              A
+            </button>
+            <button onclick="changeFontSize('large')" class="size-btn">
+              A+
+            </button>
+          </div>
+        </div>
+
+        <!-- Velocidad de animaciones -->
+        <div class="config-option">
+          <label>Velocidad de animaciones</label>
+          <select id="animationSpeed" onchange="changeAnimationSpeed()">
+            <option value="0.5">Rapida</option>
+            <option value="1" selected>Normal</option>
+            <option value="2">Lenta</option>
+          </select>
+        </div>
+
+        <!-- Emoji para calificacion -->
+        <div class="config-option">
+          <label>Estilo de calificacion</label>
+          <select id="ratingStyle" onchange="changeRatingStyle()">
+            <option value="skull">Calaveras 💀</option>
+            <option value="star">Estrellas ⭐</option>
+            <option value="ghost">Fantasmas 👻</option>
+            <option value="pumpkin">Calabazas 🎃</option>
+          </select>
+        </div>
+
+        <!-- Cantidad de emojis -->
+        <div class="config-option">
+          <label>Cantidad de emojis</label>
+          <input
+            type="range"
+            id="emojiAcount"
+            min="10"
+            max="100"
+            value="50"
+            onchange="updateEmojiAccount()"
+          />
+          <span id="emojiAmountValue">50</span>
+        </div>
+
+        <button class="reset-button" onclick="resetConfig()">
+          <i class="fas fa-undo"></i>
+          Restaurar valores predeterminados
+        </button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Las Muertes Más Absurdas</h1>
+      <h3>
+        Todo esto es humorístico y fantasioso y no es para ofender a nadie, solo
+        es por diversión
+      </h3>
+
+      <button class="death-button" onclick="showRandomDeath()">
+        <i class="fas fa-skull"></i>
+        Ver muerte absurda
+      </button>
+
+      <div id="output"></div>
+
+      <div id="rating-container" class="rating-container hidden">
+        <h4>¿Que tan absurda es esta muerte?</h4>
+        <div class="rating-stars">
+          <span class="skull-rating" data-rating="1">💀</span>
+          <span class="skull-rating" data-rating="2">💀</span>
+          <span class="skull-rating" data-rating="3">💀</span>
+          <span class="skull-rating" data-rating="4">💀</span>
+          <span class="skull-rating" data-rating="5">💀</span>
+        </div>
+        <p id="rating-text" class="rating-text"></p>
+      </div>
+    </div>
+
+    <!-- Actualización de los modales -->
+    <div class="modal" id="registerModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('registerModal')">&times;</span>
+        <div class="modal-header">
+          <i class="fas fa-user-plus"></i>
+          <h2>Registro</h2>
+        </div>
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="registerUsername"
+              ><i class="fas fa-user"></i> Nombre de usuario:</label
+            >
+            <input
+              type="text"
+              id="registerUsername"
+              placeholder="Ingresa tu nombre de usuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="registerEmail"
+              ><i class="fas fa-envelope"></i> Correo electrónico:</label
+            >
+            <input
+              type="email"
+              id="registerEmail"
+              placeholder="ejemplo@gmail.com"
+              required
+            />
+            <small id="emailHelp" class="form-text"
+              >Solo aceptamos cuentas Gmail.</small
+            >
+          </div>
+          <div class="form-group">
+            <label for="registerPassword"
+              ><i class="fas fa-lock"></i> Contraseña:</label
+            >
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Mínimo 6 caracteres"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword"
+              ><i class="fas fa-lock"></i> Confirmar contraseña:</label
+            >
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Repite la contraseña"
+              required
+            />
+          </div>
+          <div class="error-message" id="registerError"></div>
+          <button type="submit" class="auth-button">
+            <i class="fas fa-user-plus"></i> Registrarse
+          </button>
+          <div class="form-footer">
+            ¿Ya tienes cuenta?
+            <a href="#" onclick="switchModals('registerModal', 'loginModal')"
+              >Inicia sesión</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <div class="modal-header">
+          <i class="fas fa-sign-in-alt"></i>
+          <h2>Iniciar Sesión</h2>
+        </div>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginUsername"
+              ><i class="fas fa-user"></i> Nombre de usuario:</label
+            >
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Ingresa tu nombre de usuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword"
+              ><i class="fas fa-lock"></i> Contraseña:</label
+            >
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Ingresa tu contraseña"
+              required
+            />
+          </div>
+          <div class="error-message" id="loginError"></div>
+          <button type="submit" class="auth-button">
+            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+          </button>
+          <div class="form-footer">
+            ¿No tienes cuenta?
+            <a href="#" onclick="switchModals('loginModal', 'registerModal')"
+              >Regístrate</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Actualizar los botones existentes en el HTML -->
+    <div class="auth-buttons">
+      <button
+        class="fancy-button register-btn"
+        onclick="openModal('registerModal')"
+      >
+        <i class="fas fa-user-plus"></i> Registrarse
+      </button>
+      <button class="fancy-button login-btn" onclick="openModal('loginModal')">
+        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

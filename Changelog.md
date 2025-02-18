@@ -1,3 +1,6 @@
+### 1.6.10
+- Implementacion de registro y login
+
 ### 1.5.10
 - Mejora en toda la pagina
 

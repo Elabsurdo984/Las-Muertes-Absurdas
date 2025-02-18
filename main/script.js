@@ -496,6 +496,247 @@ function saveRating(death, rating) {
     deathRatings[death] = rating;
 }
 
+// Estructura para almacenar usuarios con correo electrónico
+const users = {};
+
+// Función para abrir modal
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = "block";
+    document.body.style.overflow = "hidden"; // Prevenir scroll
+}
+
+// Función para cerrar modal
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+    document.body.style.overflow = "auto"; // Restaurar scroll
+    // Limpiar mensajes de error
+    document.getElementById("registerError").textContent = "";
+    document.getElementById("loginError").textContent = "";
+    document.getElementById("registerError").classList.remove("visible");
+    document.getElementById("loginError").classList.remove("visible");
+    // Resetear formularios
+    document.getElementById("registerForm").reset();
+    document.getElementById("loginForm").reset();
+}
+
+// Función para cambiar entre modales
+function switchModals(closeModalId, openModalId) {
+    closeModal(closeModalId);
+    setTimeout(() => {
+        openModal(openModalId);
+    }, 300); // Pequeña pausa para la animación
+}
+
+// Validar correo Gmail
+function isValidGmailAddress(email) {
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    return gmailRegex.test(email);
+}
+
+// Mostrar error en el formulario
+function showError(elementId, message) {
+    const errorElement = document.getElementById(elementId);
+    errorElement.textContent = message;
+    errorElement.classList.add("visible");
+    
+    // Hacer que el mensaje desaparezca después de 5 segundos
+    setTimeout(() => {
+        errorElement.classList.remove("visible");
+    }, 5000);
+}
+
+// Función para guardar usuarios en localStorage
+function saveUsersToStorage() {
+    localStorage.setItem('usersData', JSON.stringify(users));
+}
+
+// Función para cargar usuarios desde localStorage
+function loadUsersFromStorage() {
+    const userData = localStorage.getItem('usersData');
+    if (userData) {
+        Object.assign(users, JSON.parse(userData));
+    }
+}
+
+// Cargar usuarios al iniciar la página
+document.addEventListener('DOMContentLoaded', () => {
+    loadUsersFromStorage();
+});
+
+// Manejar el registro
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('registerUsername').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    // Validaciones
+    if (username.length < 3) {
+        showError('registerError', '❌ El nombre de usuario debe tener al menos 3 caracteres');
+        return;
+    }
+    
+    if (!isValidGmailAddress(email)) {
+        showError('registerError', '❌ Solo se permiten direcciones de correo Gmail');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showError('registerError', '❌ La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        showError('registerError', '❌ Las contraseñas no coinciden');
+        return;
+    }
+    
+    // Verificar si el usuario ya existe
+    for (const existingUser in users) {
+        if (users[existingUser].username === username) {
+            showError('registerError', '❌ El nombre de usuario ya está en uso');
+            return;
+        }
+        if (users[existingUser].email === email) {
+            showError('registerError', '❌ Este correo ya está registrado');
+            return;
+        }
+    }
+    
+    // Guardar el usuario
+    const userId = 'user_' + Date.now();
+    users[userId] = {
+        username: username,
+        email: email,
+        password: password,
+        createdAt: new Date().toISOString(),
+        settings: {...config} // Copia la configuración actual
+    };
+    
+    saveUsersToStorage();
+    
+    // Mostrar mensaje de éxito con confeti
+    createEmojiShower('¡Registro exitoso!');
+    closeModal('registerModal');
+    
+    setTimeout(() => {
+        openModal('loginModal');
+    }, 1000);
+});
+
+// Manejar el inicio de sesión
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    
+    // Buscar usuario por nombre de usuario
+    let userFound = false;
+    let userId = null;
+    
+    for (const id in users) {
+        if (users[id].username === username && users[id].password === password) {
+            userFound = true;
+            userId = id;
+            break;
+        }
+    }
+    
+    if (userFound) {
+        // Cargar configuración del usuario
+        if (users[userId].settings) {
+            Object.assign(config, users[userId].settings);
+            applyConfig();
+        }
+        
+        // Mensaje de éxito con confeti
+        closeModal('loginModal');
+        createEmojiShower('¡Bienvenido de vuelta, ' + username + '!');
+        
+        // Actualizar la interfaz para mostrar que el usuario ha iniciado sesión
+        document.querySelector('.auth-buttons').innerHTML = `
+            <div class="user-profile">
+                <span class="user-greeting">Hola, ${username}</span>
+                <button class="fancy-button logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                </button>
+            </div>
+        `;
+    } else {
+        showError('loginError', '❌ Nombre de usuario o contraseña incorrectos');
+    }
+});
+
+// Función para cerrar sesión
+function logout() {
+    // Guardar la configuración actual en el usuario
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        users[currentUser].settings = {...config};
+        saveUsersToStorage();
+    }
+    
+    // Restaurar los botones de autenticación
+    document.querySelector('.auth-buttons').innerHTML = `
+        <button class="fancy-button register-btn" onclick="openModal('registerModal')">
+            <i class="fas fa-user-plus"></i> Registrarse
+        </button>
+        <button class="fancy-button login-btn" onclick="openModal('loginModal')">
+            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+    `;
+    
+    // Mensaje de despedida
+    createEmojiShower('¡Hasta pronto!');
+}
+
+// Obtener el usuario actual (si ha iniciado sesión)
+function getCurrentUser() {
+    const userGreeting = document.querySelector('.user-greeting');
+    if (userGreeting) {
+        const username = userGreeting.textContent.replace('Hola, ', '');
+        for (const id in users) {
+            if (users[id].username === username) {
+                return id;
+            }
+        }
+    }
+    return null;
+}
+
+// Cerrar el modal si se hace clic fuera del contenido
+window.addEventListener('click', (event) => {
+    if (event.target.classList.contains('modal')) {
+        closeModal(event.target.id);
+    }
+});
+
+// Verificar si hay un usuario con sesión iniciada al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    loadUsersFromStorage();
+    if (Object.keys(users).length > 0 && localStorage.getItem('currentUserId')) {
+        const currentUserId = localStorage.getItem('currentUserId');
+        if (users[currentUserId]) {
+            document.querySelector('.auth-buttons').innerHTML = `
+                <div class="user-profile">
+                    <span class="user-greeting">Hola, ${users[currentUserId].username}</span>
+                    <button class="fancy-button logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </button>
+                </div>
+            `;
+            // Cargar configuración del usuario
+            if (users[currentUserId].settings) {
+                Object.assign(config, users[currentUserId].settings);
+                applyConfig();
+            }
+        }
+    }
+});
+
 // Inicializar los iconos flotantes y el sistema de rating al cargar la página
 createFloatingIcons();
 initializeRating();
