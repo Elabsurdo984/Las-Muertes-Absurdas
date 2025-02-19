@@ -1,0 +1,206 @@
+.theme-toggle-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.theme-toggle-btn:hover {
+    transform: rotate(45deg);
+    background-color: var(--text-color-20);
+}
+
+.config-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.config-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 1001;
+    position: relative;
+}
+
+.config-button:hover {
+    transform: rotate(90deg);
+}
+
+.config-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--config-menu-bg);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--config-menu-shadow);
+    display: none;
+    width: 250px;
+    z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.config-menu.visible {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+.config-menu h3 {
+    margin: 0 0 1rem 0;
+    color: var(--text-color);
+}
+
+.config-option {
+    margin: 1.5rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--text-color-20);
+}
+
+.config-option label {
+    color: var(--text-color);
+}
+
+.config-option:last-child {
+    border-bottom: none;
+}
+
+.theme-switch {
+    position: relative;
+}
+
+.theme-switch button {
+    opacity: 1;
+    width: 3;
+    height: 0;
+}
+
+.switch-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 60px;
+    height: 30px;
+    background: var(--switch-bg);
+    border-radius: 30px;
+    position: relative;
+    transition: background-color .2s;
+    padding: 0 5px;
+}
+
+.switch-label i {
+    font-size: 0.8rem;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.switch-label:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    transition: 0.2s;
+    background: var(--secondary-color);
+}
+
+.theme-switch input:checked + .switch-label:before {
+    transform: translateX(30px);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.size-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.size-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.size-btn:hover {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+
+select {
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+#emojiAmountValue {
+    background: var(--secondary-color);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.reset-button {
+    width: 100%;
+    background: var(--text-color-20);
+    color: var(--text-color);
+    border: none;
+    padding: 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.reset-button:hover {
+    background: var(--secondary-color);
+    color: white;
+}

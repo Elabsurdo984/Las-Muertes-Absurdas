@@ -1,3 +1,6 @@
+### 2.6.12
+- Cambio en la estructura del codigo
+
 ### 1.6.10
 - Implementacion de registro y login
 
